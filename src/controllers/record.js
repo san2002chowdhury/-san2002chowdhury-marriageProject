@@ -1,4 +1,6 @@
 const Record = require("../models/record");
+const { body, check, validationResult } = require("express-validator");
+const express = require("express");
 async function toGetAllUser(req, res) {
   try {
     const allData = await Record.find({});
@@ -18,33 +20,20 @@ async function insertRecord(req, res) {
     const allData = await Record.find({});
     const body = req.body;
     console.log(body);
-
-    if (
-      !body ||
-      !body.sl_No ||
-      !body.name ||
-      !body.category ||
-      !body.invitation_Type ||
-      !body.member_Count ||
-      !body.address ||
-      !body.phone_No
-    ) {
-      return res.status(400).json({ msg: "All feilds are need to be filled" });
-    } else {
-      const data = await Record.create({
-        sl_No: allData.length + body.sl_No, //for auto increment of sl_No
-        name: body.name,
-        category: body.category,
-        invitation_Type: body.invitation_Type,
-        member_Count: body.member_Count,
-        address: body.address,
-        phoneNo: body.phoneNo,
-      });
-      return res.status(201).json({
-        msg: "data inserted successfully",
-        data,
-      });
-    }
+    const data = await Record.create({
+      sl_No: allData.length + body.sl_No, //for auto increment of sl_No
+      name: body.name,
+      category: body.category,
+      invitation_Type: body.invitation_Type,
+      member_Count: body.member_Count,
+      address: body.address,
+      phone_No: body.phone_No,
+    });
+    return res.status(201).json({
+      msg: "data inserted successfully",
+      data,
+    });
+    // }
   } catch (e) {
     return res.status(404).json({
       error: e,
